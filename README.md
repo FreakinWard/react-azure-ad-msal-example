@@ -2,6 +2,23 @@
 ---
 
 # Getting Started Example
+```shell
+# Create `.env` with environment variables
+cat << EOF >> .env
+REACT_APP_azureApplicationId = "your-azure-application-id"
+REACT_APP_azureCloudInstanceId = "your-azure-cloud-instance-id" 
+REACT_APP_azureTenantInfo = "your-azure-tenant-info"
+REACT_APP_azureRedirectUri = "http://localhost:3000"
+REACT_APP_globalMsGraphUri = "https://graph.microsoft.com" 
+REACT_APP_logoutRedirectUri = "/"
+EOF
+
+
+# start the example
+npm start
+```
+
+## Helpful resources
 
 1. [msal-react](https://github.com/AzureAD/microsoft-authentication-library-for-js/blob/dev/lib/msal-react/docs/getting-started.md#getting-started)
 1. [msal tutorial](https://docs.microsoft.com/en-us/azure/active-directory/develop/tutorial-v2-react)

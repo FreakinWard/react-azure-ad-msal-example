@@ -27,7 +27,7 @@ npm start
 
 
 ## Create App Configuration
-source: [Create App Configuration](https://docs.microsoft.com/en-us/azure/active-directory/develop/scenario-spa-app-registration)
+source: [Create App Configuration](https://docs.microsoft.com/en-us/azure/active-directory/develop/tutorial-v2-javascript-auth-code#configure-your-javascript-spa)
 
 ```javascript
 // authConfig.js
@@ -78,75 +78,64 @@ setNavigationClient is documented [here](https://github.com/AzureAD/microsoft-au
 
 ```
 
+## PingId integration
+
+### Helpful Resources
+
+- [PingId OAuth2 Developer Guide](https://docs.pingidentity.com/bundle/developer/page/ftz1601508081721.html)
+- [PingId - Get Tokens: GrantType - cod](https://docs.pingidentity.com/bundle/developer/page/yhk1601508082481.html)
+- [PingId - Intermediate (client-side) implicit grant type](https://docs.pingidentity.com/bundle/developer/page/msk1601508083227.html)
+
+1. loginqa.company.com/as/ftxNO_AE8tT/resume/as/authorization.ping
+    1. MSAL Login
+1. authenticator.pingone.com/pingid/ppm/auth
+    1. blank white screen -> PingId Authenticated (Green)
+1. loginqa.company.com/as/ftxNO_AE8tT/resume/as/authorization.ping
+    1. PingId Authenticated (Green) ->
+1. localhost
+    1. black screen -> app load
 
 
-# Getting Started with Create React App
+### Overview
+#### MSAL is expected to handle auth:
+- access/refresh tokens
+- token validation
 
-This project was bootstrapped with [Create React App](https://github.com/facebook/create-react-app).
+#### OpenId is expected to do:
+- ClientId: pingIdClientIdValue
+- ClientSecret: pingIdClientSecretValue
+- ResponseType: code
+- GrantType: refresh_token
 
-## Available Scripts
+#### Refresh Request Details
+- Authority: "https://loginqa.company.com"
+- path: as/token.oauth2
+- Header: Authorization: Basic {base64EncodedClientIdAndSecret}
 
-In the project directory, you can run:
+#### Steps
+Given MSAL is authenticated, then redirect to the pingId authorization endpoint
 
-### `yarn start`
+Authorization endpoint: https://localhost:3000/as/authorization.oauth2
+                        ?client_id=pingIdClientIdValue
+                        &response_type=code
+                        &scope=edit
+                        &redirect_uri=
 
-Runs the app in the development mode.\
-Open [http://localhost:3000](http://localhost:3000) to view it in the browser.
+---
+>You're still here? It's over...go home.
 
-The page will reload if you make edits.\
-You will also see any lint errors in the console.
+---
 
-### `yarn test`
 
-Launches the test runner in the interactive watch mode.\
-See the section about [running tests](https://facebook.github.io/create-react-app/docs/running-tests) for more information.
-
-### `yarn build`
-
-Builds the app for production to the `build` folder.\
-It correctly bundles React in production mode and optimizes the build for the best performance.
-
-The build is minified and the filenames include the hashes.\
-Your app is ready to be deployed!
-
-See the section about [deployment](https://facebook.github.io/create-react-app/docs/deployment) for more information.
-
-### `yarn eject`
-
-**Note: this is a one-way operation. Once you `eject`, you can’t go back!**
-
-If you aren’t satisfied with the build tool and configuration choices, you can `eject` at any time. This command will remove the single build dependency from your project.
-
-Instead, it will copy all the configuration files and the transitive dependencies (webpack, Babel, ESLint, etc) right into your project so you have full control over them. All of the commands except `eject` will still work, but they will point to the copied scripts so you can tweak them. At this point you’re on your own.
-
-You don’t have to ever use `eject`. The curated feature set is suitable for small and middle deployments, and you shouldn’t feel obligated to use this feature. However we understand that this tool wouldn’t be useful if you couldn’t customize it when you are ready for it.
-
-## Learn More
-
-You can learn more in the [Create React App documentation](https://facebook.github.io/create-react-app/docs/getting-started).
-
-To learn React, check out the [React documentation](https://reactjs.org/).
-
-### Code Splitting
-
-This section has moved here: [https://facebook.github.io/create-react-app/docs/code-splitting](https://facebook.github.io/create-react-app/docs/code-splitting)
-
-### Analyzing the Bundle Size
-
-This section has moved here: [https://facebook.github.io/create-react-app/docs/analyzing-the-bundle-size](https://facebook.github.io/create-react-app/docs/analyzing-the-bundle-size)
-
-### Making a Progressive Web App
-
-This section has moved here: [https://facebook.github.io/create-react-app/docs/making-a-progressive-web-app](https://facebook.github.io/create-react-app/docs/making-a-progressive-web-app)
-
-### Advanced Configuration
-
-This section has moved here: [https://facebook.github.io/create-react-app/docs/advanced-configuration](https://facebook.github.io/create-react-app/docs/advanced-configuration)
-
-### Deployment
-
-This section has moved here: [https://facebook.github.io/create-react-app/docs/deployment](https://facebook.github.io/create-react-app/docs/deployment)
-
-### `yarn build` fails to minify
-
-This section has moved here: [https://facebook.github.io/create-react-app/docs/troubleshooting#npm-run-build-fails-to-minify](https://facebook.github.io/create-react-app/docs/troubleshooting#npm-run-build-fails-to-minify)
+https://logindev.company.com/as/authorization.oauth2
+?client_id=clientId
+&redirect_uri=https%3A%2F%2Flocalhost%3000%2Flogin-callback
+&response_type=code
+&scope=openid%20profile%20profile
+&code_challenge=codeChallengeValue
+&code_challenge_method=codeChallengeMethod
+&response_mode=form_post
+&nonce=nonceValue
+&state=stateValue
+&x-client-SKU=ID_NETSTANDARD2_0
+&x-client-ver=5.5.0.0
